@@ -1,13 +1,22 @@
 {
     "packages": [
         {
-            "name": "test package 1"
-        },
-        {
-            "name": "test package 2"
-        },
-        {
-            "name": "test package 3"
+            "name": "package name",
+            "description": "description of the package",
+            "platforms": [
+                {
+                    "name": "debian",
+                    "commands": [
+                        "command for installing debian package"
+                    ]
+                },
+                {
+                    "name": "arch",
+                    "commands": [
+                        "command for installing arch package"
+                    ]
+                }
+            ]
         }
     ]
 }
