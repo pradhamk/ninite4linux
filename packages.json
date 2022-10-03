@@ -1,0 +1,13 @@
+{
+    "packages": [
+        {
+            "name": "test package 1"
+        },
+        {
+            "name": "test package 2"
+        },
+        {
+            "name": "test package 3"
+        }
+    ]
+}
