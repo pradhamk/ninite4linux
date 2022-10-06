@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"strings"
 )
 
 type Packages struct {
@@ -39,6 +41,22 @@ func ReadPackagesList() Packages {
 	return packages
 }
 
+func getOSPlatform() string {
+	out, err := exec.Command("cat", "/etc/os-release").Output()
+	ErrHandle(err)
+	fileData := string(out)
+	data := strings.Split(fileData, "\n")
+	var idId int
+	for i := 0; i < len(data); i++ {
+		if strings.Contains(data[i], "ID=") {
+			idId = i
+			break
+		}
+	}
+	return strings.Replace(data[idId], "ID=", "", 1)
+}
+
 func main() {
-	packages := ReadPackagesList()
+	//packages := ReadPackagesList()
+	//platform := getOSPlatform()
 }
