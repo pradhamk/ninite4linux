@@ -7,22 +7,9 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	structs "pradhamk/ninite4linux/structs"
 )
-
-type Packages struct {
-	Packages []Package `json: "packages"`
-}
-
-type Package struct {
-	Name        string     `json: "name"`
-	Description string     `json: "description"`
-	Platforms   []Platform `json: "platforms"`
-}
-
-type Platform struct {
-	Name     string   `json: "name"`
-	Commands []string `json: "commands"`
-}
 
 func ErrHandle(err error) {
 	if err != nil {
@@ -30,8 +17,8 @@ func ErrHandle(err error) {
 	}
 }
 
-func ReadPackagesList() Packages {
-	var packages Packages
+func ReadPackagesList() structs.Packages {
+	var packages structs.Packages
 	file, err := os.Open("packages.json")
 	ErrHandle(err)
 	defer file.Close()
