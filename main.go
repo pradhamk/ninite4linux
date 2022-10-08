@@ -8,9 +8,14 @@ import (
 	"os/exec"
 	structs "pradhamk/ninite4linux/structs"
 	"strings"
+
+	"github.com/fatih/color"
+	"github.com/manifoldco/promptui"
 )
 
 var platform string
+var StringFormatGreen string = color.GreenString("[*]")
+var StringFormatRed string = color.RedString("[*]")
 
 func ErrHandle(err error) {
 	if err != nil {
@@ -29,7 +34,7 @@ func ReadPackagesList() structs.Packages {
 	return packages
 }
 
-func getOSPlatform() string {
+func GetOSPlatform() string {
 	out, err := exec.Command("cat", "/etc/os-release").Output()
 	ErrHandle(err)
 	fileData := string(out)
@@ -44,8 +49,8 @@ func getOSPlatform() string {
 	return strings.Replace(data[idId], "ID=", "", 1)
 }
 
-func installPackage(pkg structs.Package) {
-	var success bool
+func InstallPackage(pkg structs.Package) {
+	success := true
 	var cmds []string
 	for i := 0; i < len(pkg.Platforms); i++ {
 		if pkg.Platforms[i].Name == platform {
@@ -53,6 +58,7 @@ func installPackage(pkg structs.Package) {
 			break
 		}
 	}
+	fmt.Printf("%s Installing %s\n", StringFormatGreen, pkg.Name)
 	for i := 0; i < len(cmds); i++ {
 		err := exec.Command("bash", "-c", cmds[i]).Run()
 		if err != nil {
@@ -60,16 +66,61 @@ func installPackage(pkg structs.Package) {
 			break
 		}
 	}
-	if success != true {
-		fmt.Printf("Unable to install package %s\n", pkg.Name)
+	if !success {
+		fmt.Printf("%s Unable to install %s\n", StringFormatRed, pkg.Name)
 	} else {
-		fmt.Printf("%s successfully installed\n", pkg.Name)
+		fmt.Printf("%s Installed %s\n", StringFormatGreen, pkg.Name)
 	}
+}
+
+func PromptUser(pkgs structs.Packages) []string {
+	var PkgNames []string
+	var SelectedPkgs []string
+	for i := 0; i < len(pkgs.Packages); i++ {
+		PkgNames = append(PkgNames, pkgs.Packages[i].Name)
+	}
+	PkgNames = append(PkgNames, "Install?")
+	for {
+		contains := false
+		prompt := promptui.Select{
+			Label: "Select the packages you want to install:",
+			Items: PkgNames,
+		}
+
+		_, result, _ := prompt.Run()
+		if result == "Install?" {
+			break
+		} else if len(result) == 0 {
+			continue
+		}
+
+		for _, val := range SelectedPkgs {
+			if result == val {
+				contains = true
+				break
+			}
+		}
+		if !contains {
+			SelectedPkgs = append(SelectedPkgs, result)
+		}
+	}
+	return SelectedPkgs
 }
 
 func main() {
 	packages := ReadPackagesList()
-	//platform = getOSPlatform()
-	platform = "debian"
-	installPackage(packages.Packages[0])
+	platform = GetOSPlatform()
+	//platform = "debian"
+	fmt.Printf("%s OS Platform detected as %s\n", StringFormatGreen, strings.ToUpper(platform))
+	SelectedPkgs := PromptUser(packages)
+	for i := 0; i < len(SelectedPkgs); i++ {
+		var pkg structs.Package
+		for j, val := range packages.Packages {
+			if val.Name == SelectedPkgs[i] {
+				pkg = packages.Packages[j]
+				break
+			}
+		}
+		InstallPackage(pkg)
+	}
 }
