@@ -19,6 +19,27 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Firefox",
+            "description": "A free and open-source web browser",
+            "platforms": [
+                {
+                    "name": "debian",
+                    "commands": [
+                        "sudo apt install curl",
+                        "curl \"https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US&_gl=1\" | sed 's/<a href=\"//g' | sed 's,\">Found</a>.,,g' > url.txt",
+                        "curl $(cat url.txt) -o firefox.tar.bz2 && rm url.txt",
+                        "tar -xf firefox.tar.bz2 && sudo mv firefox/ /opt && ln -s /opt/firefox/firefox /usr/local/bin/firefox"
+                    ]
+                },
+                {
+                    "name": "arch",
+                    "commands": [
+                        "command for installing arch package"
+                    ]
+                }
+            ]
         }
     ]
 }
