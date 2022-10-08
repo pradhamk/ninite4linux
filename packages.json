@@ -59,6 +59,25 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Discord",
+            "description": "A VoIP and instant messaging social platform",
+            "platforms": [
+                {
+                    "name": "debian",
+                    "commands": [
+                        "curl -L \"https://discord.com/api/download?platform=linux&format=deb\" -o discord.deb",
+                        "sudo apt install ./discord.deb && rm discord.deb"
+                    ]
+                },
+                {
+                    "name": "arch",
+                    "commands": [
+                        "command for installing arch package"
+                    ]
+                }
+            ]
         }
     ]
 }
