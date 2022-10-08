@@ -53,12 +53,11 @@ func installPackage(pkg structs.Package) {
 		}
 	}
 	for i := 0; i < len(cmds); i++ {
-		cmd := strings.Split(cmds[i], " ")
-		s, err := exec.Command(cmd[0], cmd[1:]...).Output()
+		s, err := exec.Command("bash", "-c", cmds[i]).Output()
 		if err != nil {
-			fmt.Printf("Unable to install package %s", pkg.Name)
+			fmt.Printf("Unable to install package %s\n", pkg.Name)
 		} else {
-			fmt.Printf("%s successfully installed", pkg.Name)
+			fmt.Printf("%s successfully installed\n", pkg.Name)
 		}
 		fmt.Println(s)
 	}
