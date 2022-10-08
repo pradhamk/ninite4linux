@@ -1,13 +1,13 @@
 {
     "packages": [
         {
-            "name": "package name",
-            "description": "description of the package",
+            "name": "Spotify",
+            "description": "A music thing",
             "platforms": [
                 {
                     "name": "debian",
                     "commands": [
-                        "command for installing debian package"
+                        "curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - "
                     ]
                 },
                 {

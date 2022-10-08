@@ -6,10 +6,11 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"strings"
-
 	structs "pradhamk/ninite4linux/structs"
+	"strings"
 )
+
+var platform string
 
 func ErrHandle(err error) {
 	if err != nil {
@@ -43,7 +44,29 @@ func getOSPlatform() string {
 	return strings.Replace(data[idId], "ID=", "", 1)
 }
 
+func installPackage(pkg structs.Package) {
+	var cmds []string
+	for i := 0; i < len(pkg.Platforms); i++ {
+		if pkg.Platforms[i].Name == platform {
+			cmds = pkg.Platforms[i].Commands
+			break
+		}
+	}
+	for i := 0; i < len(cmds); i++ {
+		cmd := strings.Split(cmds[i], " ")
+		s, err := exec.Command(cmd[0], cmd[1:]...).Output()
+		if err != nil {
+			fmt.Printf("Unable to install package %s", pkg.Name)
+		} else {
+			fmt.Printf("%s successfully installed", pkg.Name)
+		}
+		fmt.Println(s)
+	}
+}
+
 func main() {
-	//packages := ReadPackagesList()
-	//platform := getOSPlatform()
+	packages := ReadPackagesList()
+	//platform = getOSPlatform()
+	platform = "debian"
+	installPackage(packages.Packages[0])
 }
