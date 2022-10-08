@@ -40,6 +40,25 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "Chrome",
+            "description": "A cross-platform web browser developed by Google",
+            "platforms": [
+                {
+                    "name": "debian",
+                    "commands": [
+                        "sudo apt install wget && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb",
+                        "sudo apt install ./google-chrome-stable_current_amd64.deb && rm google-chrome-stable_current_amd64.deb"
+                    ]
+                },
+                {
+                    "name": "arch",
+                    "commands": [
+                        "command for installing arch package"
+                    ]
+                }
+            ]
         }
     ]
 }
