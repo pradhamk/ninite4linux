@@ -45,6 +45,7 @@ func getOSPlatform() string {
 }
 
 func installPackage(pkg structs.Package) {
+	var success bool
 	var cmds []string
 	for i := 0; i < len(pkg.Platforms); i++ {
 		if pkg.Platforms[i].Name == platform {
@@ -53,13 +54,16 @@ func installPackage(pkg structs.Package) {
 		}
 	}
 	for i := 0; i < len(cmds); i++ {
-		s, err := exec.Command("bash", "-c", cmds[i]).Output()
+		err := exec.Command("bash", "-c", cmds[i]).Run()
 		if err != nil {
-			fmt.Printf("Unable to install package %s\n", pkg.Name)
-		} else {
-			fmt.Printf("%s successfully installed\n", pkg.Name)
+			success = false
+			break
 		}
-		fmt.Println(s)
+	}
+	if success != true {
+		fmt.Printf("Unable to install package %s\n", pkg.Name)
+	} else {
+		fmt.Printf("%s successfully installed\n", pkg.Name)
 	}
 }
 
